@@ -35,4 +35,12 @@ public class ProductService {
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
+
+    public void deleteProductById(Long id) {
+        productRepository.deleteById(id);
+    }
+
+    public void deleteCategoryById(Long id) {
+        categoryRepository.deleteById(id);
+    }
 }

@@ -1,10 +1,13 @@
 // ProductController.java
 package com.example.productservice.controller;
 
+import com.example.productservice.exp.ProductNotFoundException;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
 import com.example.productservice.service.ProductService;
+import jakarta.ws.rs.DELETE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,4 +43,16 @@ public class ProductController {
     public Category saveCategory(@RequestBody Category category) {
         return productService.saveCategory(category);
     }
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable long id) {
+        try {
+            productService.deleteProductById(id);
+            return ResponseEntity.noContent().build(); // 204 No Content
+        } catch (ProductNotFoundException e) {
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        }
+    }
+
+
+
 }
