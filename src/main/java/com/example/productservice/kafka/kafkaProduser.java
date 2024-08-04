@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 public class kafkaProduser {
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public void sendProductUpdate(String message) {
+    public void sendProductUpdate(Product product) {
+        String message = String.format("Product added: ID=%d, Name=%s, Price=%s",
+                product.getId(),
+                product.getName(),
+                product.getPrice());
         kafkaTemplate.send("product-topic", message);
     }
 

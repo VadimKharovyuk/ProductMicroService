@@ -24,11 +24,6 @@ public class ProductController {
     private final ProductService productService;
     private final kafkaProduser produser;
 
-@GetMapping("/test")
-public  String test ( @RequestBody String  text){
-   produser.sendProductUpdate(text);
-   return "susses";
-}
     @GetMapping
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
@@ -37,9 +32,9 @@ public  String test ( @RequestBody String  text){
 
     @PostMapping("/add")
     public Product save(@RequestBody Product product) {
-
-        return productService.save(product);
-
+        Product savedProduct = productService.save(product);
+        produser.sendProductUpdate(savedProduct); // Отправка сообщения о добавлении продукта
+        return savedProduct;
     }
 
     @GetMapping("/category/{categoryId}")
