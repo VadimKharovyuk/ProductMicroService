@@ -1,6 +1,5 @@
-// ProductService.java
-package com.example.productservice.service;
 
+package com.example.productservice.service;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
 import com.example.productservice.repository.CategoryRepository;
@@ -42,5 +41,9 @@ public class ProductService {
 
     public void deleteCategoryById(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    public List<Product> searchProductsByName(String name) {
+        return productRepository.findByNameContainingIgnoreCase(name);
     }
 }

@@ -1,16 +1,11 @@
-// ProductController.java
-package com.example.productservice.controller;
 
+package com.example.productservice.controller;
 import com.example.productservice.exp.ProductNotFoundException;
-import com.example.productservice.kafka.KafkaProducerConfig;
 import com.example.productservice.kafka.kafkaProduser;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
 import com.example.productservice.service.ProductService;
-import jakarta.ws.rs.DELETE;
 import lombok.RequiredArgsConstructor;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,6 +54,10 @@ public class ProductController {
         } catch (ProductNotFoundException e) {
             return ResponseEntity.notFound().build(); // 404 Not Found
         }
+    }
+    @GetMapping("/search")
+    public List<Product> searchProductsByName(@RequestParam String name) {
+        return productService.searchProductsByName(name);
     }
 
 
