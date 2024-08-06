@@ -6,6 +6,8 @@ import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
 import com.example.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,9 +57,42 @@ public class ProductController {
             return ResponseEntity.notFound().build(); // 404 Not Found
         }
     }
+
     @GetMapping("/search")
     public List<Product> searchProductsByName(@RequestParam String name) {
         return productService.searchProductsByName(name);
+    }
+
+
+
+
+
+    @GetMapping("/edit/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+        try {
+            Product product = productService.findProductById(id);
+            return ResponseEntity.ok(product);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    @PostMapping("/edit/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        try {
+            Product existingProduct = productService.findProductById(id);
+
+            // Обновление существующего продукта
+            existingProduct.setName(product.getName());
+            existingProduct.setPrice(product.getPrice());
+            existingProduct.setCategory(product.getCategory());
+            // Обновите другие поля, которые вы хотите изменить
+
+            Product updatedProduct = productService.save(existingProduct);
+
+            return ResponseEntity.ok(updatedProduct);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 
