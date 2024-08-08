@@ -1,11 +1,14 @@
 
 package com.example.productservice.service;
+import com.example.productservice.dto.CartItemDto;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
+import com.example.productservice.repository.CartServiceClient;
 import com.example.productservice.repository.CategoryRepository;
 import com.example.productservice.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +19,11 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
+
     public Product save(Product product) {
         return productRepository.save(product);
     }
+
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -51,5 +56,21 @@ public class ProductService {
     public Product findProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+    }
+
+
+
+
+    @Autowired
+    private CartServiceClient cartFeignClient;
+
+    public void addProductToCart(Long userId, Long productId, String productName, int quantity) {
+        CartItemDto cartItemDto = new CartItemDto();
+        cartItemDto.setUserId(userId);
+        cartItemDto.setProductId(productId);
+        cartItemDto.setProductName(productName);
+        cartItemDto.setQuantity(quantity);
+
+        cartFeignClient.addItemToCart(cartItemDto);
     }
 }
