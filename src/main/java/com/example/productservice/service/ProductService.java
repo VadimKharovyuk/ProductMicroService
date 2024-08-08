@@ -1,6 +1,7 @@
 
 package com.example.productservice.service;
 import com.example.productservice.dto.CartItemDto;
+import com.example.productservice.dto.ReviewDTO;
 import com.example.productservice.model.Category;
 import com.example.productservice.model.Product;
 import com.example.productservice.repository.CartServiceClient;
@@ -73,4 +74,5 @@ public class ProductService {
 
         cartFeignClient.addItemToCart(cartItemDto);
     }
+
 }
