@@ -4,7 +4,7 @@ import com.example.productservice.Mapper.ReviewMapper;
 import com.example.productservice.dto.ReviewDTO;
 import com.example.productservice.model.Review;
 import com.example.productservice.repository.ReviewService;
-import com.example.productservice.repository.ProductRepository; // Импортируйте репозиторий
+import com.example.productservice.repository.ProductRepository;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,4 +65,21 @@ public class ReviewController {
         List<ReviewDTO> reviews = reviewService.getReviewsByProductId(productId);
         return ResponseEntity.ok(reviews);
     }
+    @PostMapping("/product/delete/{productId}")
+    public ResponseEntity<Void> deleteReviewsByProductId(@PathVariable Long productId) {
+        // Проверяем наличие отзывов для данного продукта
+        List<ReviewDTO> reviews = reviewService.getReviewsByProductId(productId);
+        if (!reviews.isEmpty()) {
+            // Удаляем все отзывы для данного продукта
+            reviewService.deleteReviewsByProductId(productId);
+            return ResponseEntity.noContent().build(); // Успешное удаление без контента в ответе
+        } else {
+            // Отзывы не найдены
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+
+
 }

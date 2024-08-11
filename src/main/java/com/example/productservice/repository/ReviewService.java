@@ -10,10 +10,14 @@ public interface ReviewService {
 
     Review saveReview(Review review);
 
+
     Optional<Review> getReviewById(Long id);
 
     void deleteReview(Long id);
 
     List<ReviewDTO> getReviewsByProductId(Long productId);
+
+
+    void deleteReviewsByProductId(Long productId);
 
 }

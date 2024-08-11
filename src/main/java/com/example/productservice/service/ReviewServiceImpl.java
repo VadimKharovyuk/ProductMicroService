@@ -5,6 +5,7 @@ import com.example.productservice.dto.ReviewDTO;
 import com.example.productservice.model.Review;
 import com.example.productservice.repository.ReviewRepository;
 import com.example.productservice.repository.ReviewService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
-    @Autowired
-    private ReviewRepository reviewRepository;
+
+    private  final ReviewRepository reviewRepository;
 
     @Override
     public Review saveReview(Review review) {
@@ -38,4 +40,11 @@ public class ReviewServiceImpl implements ReviewService {
                 .map(ReviewMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteReviewsByProductId(Long productId) {
+        List<Review> reviews = reviewRepository.findByProductId(productId);
+        reviewRepository.deleteAll(reviews);
+    }
+
 }

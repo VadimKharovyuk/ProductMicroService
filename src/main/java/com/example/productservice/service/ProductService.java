@@ -19,6 +19,7 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private  final CartServiceClient cartFeignClient;
 
 
     public Product save(Product product) {
@@ -58,12 +59,6 @@ public class ProductService {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
     }
-
-
-
-
-    @Autowired
-    private CartServiceClient cartFeignClient;
 
     public void addProductToCart(Long userId, Long productId, String productName, int quantity) {
         CartItemDto cartItemDto = new CartItemDto();
